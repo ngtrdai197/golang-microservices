@@ -1,19 +1,16 @@
 package main
 
 import (
-	"codebase/internal/worker"
-	"github.com/rs/zerolog/log"
-
+	"codebase/internal/worker/email"
 	"github.com/hibiken/asynq"
 )
 
 func main() {
-	processor := worker.NewRedisTaskProcessor(asynq.RedisClientOpt{
+	processor := worker_email.NewEmailTaskProcessor(asynq.RedisClientOpt{
 		Addr: "localhost:6379",
 		DB:   0,
 	})
-	log.Info().Msg("Starting asynq server...")
-	if err := processor.Start(); err != nil {
+	if err := processor.Process(); err != nil {
 		panic(err)
 	}
 }
