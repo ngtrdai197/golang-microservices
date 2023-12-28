@@ -24,12 +24,23 @@ func NewPostTransport(redisOpts asynq.RedisClientOpt) PostTransport {
 }
 
 func (p *postTransport) CreatePost(ctx context.Context, req *v1.CreatePostRequest) (*v1.CreatePostResponse, error) {
-	task := workeremail.NewEmailDeliveryDistributor(p.redisOpts)
-	err := task.DistributeTaskEmailDelivery(ctx, &workeremail.DeliveryPayload{
+	distributor := workeremail.NewEmailDeliveryDistributor(p.redisOpts)
+	err := distributor.DistributeTaskEmailDelivery(ctx, &workeremail.DeliveryPayload{
 		Msg: "Create new post with name: " + req.Name + " and content: " + req.Content,
 	})
+	/**
+	 * Note: Close redis client after finish,
+	 * reduce connection to redis server and avoid memory leak in long-running process (like server)
+	 * when create new redis client for each request
+	 */
+	defer func(distributor workeremail.TaskDistributor) {
+		err := distributor.Close()
+		if err != nil {
+			log.Fatal().Msgf("Error close redis client detail = %v", err)
+		}
+	}(distributor)
 	if err != nil {
-		log.Err(err).Msg("Error create task new post delivery")
+		log.Err(err).Msg("Error create distributor new post delivery")
 		return nil, err
 	}
 	return &v1.CreatePostResponse{

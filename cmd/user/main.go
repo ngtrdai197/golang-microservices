@@ -150,26 +150,6 @@ func main() {
 	if !errors.Is(err, http.ErrServerClosed) {
 		log.Fatal().Msgf("Error listen and serve http server detail = %v", err)
 	}
-
-	//distribute := workeremail.NewEmailDeliveryDistributor(asynq.RedisClientOpt{
-	//	Addr: fmt.Sprintf("%s:%d", config.Cfg.RedisHost, config.Cfg.RedisPort),
-	//	DB:   config.Cfg.RedisDatabase,
-	//})
-	//
-	//defer func(distribute workeremail.TaskDistributor) {
-	//	err := distribute.Close()
-	//	if err != nil {
-	//		log.Fatal().Msgf("Error close redis client detail = %v", err)
-	//	}
-	//}(distribute)
-	//
-	//err := distribute.DistributeTaskEmailDelivery(context.Background(), &workeremail.DeliveryPayload{
-	//	Msg: "dainguyen.iammm+1@gmail.com",
-	//})
-	//
-	//if err != nil {
-	//	log.Fatal().Msgf("Error distribute task email delivery detail = %v", err)
-	//}
 }
 
 func init() {
