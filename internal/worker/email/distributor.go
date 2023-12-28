@@ -1,4 +1,4 @@
-package worker_email
+package workeremail
 
 import (
 	"context"

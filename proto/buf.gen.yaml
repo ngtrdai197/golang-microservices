@@ -1,0 +1,22 @@
+version: v1
+plugins:
+  - plugin: go
+    out: ../api
+    opt:
+      - paths=source_relative
+  - plugin: go-grpc
+    out: ../api
+    opt:
+      - paths=source_relative
+  - plugin: grpc-gateway
+    out: ../api
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+  - plugin: openapiv2
+    out: ../api
+    opt:
+      - json_names_for_fields=true
+      - simple_operation_ids=true
+  - plugin: buf.build/bufbuild/validate-go
+    out: ../api

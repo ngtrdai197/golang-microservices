@@ -1,3 +1,6 @@
-.PHONY: worker
+.PHONY: gen-sqlc gen-proto
 
-worker: go run cmd/worker/main.go
+gen-proto:
+	docker compose up generate_pb_go
+gen-sqlc:
+	docker compose up generate_sqlc

@@ -1,12 +1,10 @@
-package worker_email
+package workeremail
 
 import (
-	"codebase/internal/worker"
+	"codebase/constant"
 	"context"
 	"github.com/hibiken/asynq"
 )
-
-const DeliveryEmail = "task:email"
 
 type Processor interface {
 	HandleEmailDeliveryTask(ctx context.Context, t *asynq.Task) error
@@ -25,9 +23,9 @@ func NewEmailTaskProcessor(redisOpt asynq.RedisClientOpt) Processor {
 			Concurrency: 10,
 			// Optionally specify multiple queues with different priority.
 			Queues: map[string]int{
-				worker.QueuePriorityCritical: 6,
-				worker.QueuePriorityDefault:  3,
-				worker.QueuePriorityLow:      1,
+				constant.QueuePriorityCritical: 6,
+				constant.QueuePriorityDefault:  3,
+				constant.QueuePriorityLow:      1,
 			},
 		},
 	)
@@ -38,7 +36,6 @@ func NewEmailTaskProcessor(redisOpt asynq.RedisClientOpt) Processor {
 
 func (p *processor) Process() error {
 	mux := asynq.NewServeMux()
-	mux.HandleFunc(DeliveryEmail, p.HandleEmailDeliveryTask)
-
+	mux.HandleFunc(constant.DeliveryEmail, p.HandleEmailDeliveryTask)
 	return p.s.Run(mux)
 }

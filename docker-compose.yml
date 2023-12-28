@@ -1,0 +1,23 @@
+version: "3.4"
+
+services:
+  # generate go protobuf
+  generate_pb_go:
+    image: gen-go
+    build:
+      context: ./proto/
+      target: protoc_gen_go
+      dockerfile: proto.Dockerfile
+    working_dir: /app/
+    volumes:
+      - "./:/app/"
+    entrypoint: bash ./proto/gen-proto.sh
+
+  # generate sql from sqlc
+  generate_sqlc:
+    image: sqlc/sqlc:1.23.0
+    volumes:
+      - "./sqlc:/src/"
+      - "./database:/app/database"
+      - "./sqlc/sqlc.yaml:/sqlc.yaml"
+    command: ["generate", "--experimental"]

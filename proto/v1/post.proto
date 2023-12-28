@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package post.v1;
+option go_package = "post/v1";
+
+import "google/api/annotations.proto";
+
+// simple message
+message CreatePostRequest {
+  string name = 1;
+  string content = 2;
+}
+
+message CreatePostResponse {
+  string name = 1;
+  string content = 2;
+}
+
+service Post {
+  rpc CreatePost (CreatePostRequest) returns (CreatePostResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/post"
+      body: "*"
+    };
+  }
+}

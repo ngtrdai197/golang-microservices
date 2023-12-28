@@ -1,6 +1,7 @@
-package worker_email
+package workeremail
 
 import (
+	"codebase/constant"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -17,7 +18,7 @@ func (distributor *taskDistributor) DistributeTaskEmailDelivery(ctx context.Cont
 	if err != nil {
 		return fmt.Errorf("failed to markshal task payload: %w", err)
 	}
-	task := asynq.NewTask(DeliveryEmail, payload, opts...)
+	task := asynq.NewTask(constant.DeliveryEmail, payload, opts...)
 	if err != nil {
 		log.Fatal().Msgf("Error create task msg delivery detail = %v", err)
 		return err
